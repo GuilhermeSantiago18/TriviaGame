@@ -32,11 +32,11 @@ class Login extends Component {
     history.push('/settings');
   };
 
-  handleBtn = () => {
+  handleBtn = async () => {
     const { apiDispatch, tokenAPI, history } = this.props;
-    apiDispatch();
-    const { token } = tokenAPI;
-    localStorage.setItem('token', JSON.stringify(token));
+    await apiDispatch();
+    console.log(tokenAPI)
+    localStorage.setItem('token', JSON.stringify());
     history.push('/game');
   };
 
@@ -92,7 +92,7 @@ const mapDispatchToProps = (dispatch) => ({
   apiDispatch: (state) => dispatch(fetchCurrency(state)),
 });
 const mapStateToProps = (state) => ({
-  tokenAPI: state.Playgame.api,
+  tokenAPI: state,
 });
 
 Login.propTypes = {
