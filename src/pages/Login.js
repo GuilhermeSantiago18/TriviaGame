@@ -11,16 +11,24 @@ class Login extends Component {
 
   handleChange = ({ target }) => {
     const { value, name } = target;
-    this.setState({
-      [name]: value,
-    }, () => this.verifyBtn());
+    this.setState(
+      {
+        [name]: value,
+      },
+      () => this.verifyBtn(),
+    );
   };
 
   verifyBtn = () => {
     const { email, name } = this.state;
     const minLength = 1;
     const verifyNameAndEmail = name.length && email.length >= minLength;
-    this.setState({ isBtnDisabled: !(verifyNameAndEmail) });
+    this.setState({ isBtnDisabled: !verifyNameAndEmail });
+  };
+
+  handleBtnConfig = () => {
+    const { history } = this.props;
+    history.push('/settings');
   };
 
   //   handleBtn = (e) => {
@@ -67,6 +75,13 @@ class Login extends Component {
             onClick={ this.handleBtn }
           >
             Play
+          </button>
+          <button
+            type="button"
+            data-testid="btn-settings"
+            onClick={ this.handleBtnConfig }
+          >
+            Configurações
           </button>
         </form>
       </div>
