@@ -33,9 +33,11 @@ class Login extends Component {
   };
 
   handleBtn = () => {
-    const { apiDispatch } = this.props;
+    const { apiDispatch, tokenAPI, history } = this.props;
     apiDispatch();
-    localStorage.setItem('token', JSON.stringify(apiDispatch));
+    const { token } = tokenAPI;
+    localStorage.setItem('token', JSON.stringify(token));
+    history.push('/game');
   };
 
   render() {
@@ -67,7 +69,7 @@ class Login extends Component {
           </label>
           <button
             data-testid="btn-play"
-            type="submit"
+            type="button"
             name="btn"
             disabled={ isBtnDisabled }
             onClick={ this.handleBtn }
@@ -89,12 +91,18 @@ class Login extends Component {
 const mapDispatchToProps = (dispatch) => ({
   apiDispatch: (state) => dispatch(fetchCurrency(state)),
 });
+const mapStateToProps = (state) => ({
+  tokenAPI: state.Playgame.api,
+});
 
 Login.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
-  }).isRequired,
-  apiDispatch: PropTypes.func.isRequired,
-};
+  }),
+  tokenAPI: PropTypes.shape({
+    token: PropTypes.string,
+  }),
+  apiDispatch: PropTypes.func,
+}.isRequired;
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
