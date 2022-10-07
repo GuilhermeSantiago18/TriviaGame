@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { fetchCurrency } from '../redux/actions';
 
 class Login extends Component {
   state = {
@@ -19,7 +20,7 @@ class Login extends Component {
     );
   };
 
-  verifyBtn = () => {
+  verifyBtn = async () => {
     const { email, name } = this.state;
     const minLength = 1;
     const verifyNameAndEmail = name.length && email.length >= minLength;
@@ -31,14 +32,11 @@ class Login extends Component {
     history.push('/settings');
   };
 
-  //   handleBtn = (e) => {
-  //     e.preventDefault();
-  //     const { dispatch, history } = this.props;
-  //     const { email } = this.state;
-  //     dispatch(getEmail(email));
-  //     dispatch(fetchWithThunk());
-  //     history.push('/carteira');
-  //   };
+  handleBtn = () => {
+    const { apiDispatch } = this.props;
+    apiDispatch();
+    localStorage.setItem('token', JSON.stringify(apiDispatch));
+  };
 
   render() {
     const { email, name, isBtnDisabled } = this.state;
@@ -88,10 +86,15 @@ class Login extends Component {
     );
   }
 }
+const mapDispatchToProps = (dispatch) => ({
+  apiDispatch: (state) => dispatch(fetchCurrency(state)),
+});
 
 Login.propTypes = {
-  dispatch: PropTypes.func,
-  history: PropTypes.func,
-}.isRequired;
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+  apiDispatch: PropTypes.func.isRequired,
+};
 
-export default connect()(Login);
+export default connect(null, mapDispatchToProps)(Login);
