@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { fetchCurrency } from '../redux/actions';
 
 class Login extends Component {
   state = {
@@ -19,7 +20,7 @@ class Login extends Component {
     );
   };
 
-  verifyBtn = () => {
+  verifyBtn = async () => {
     const { email, name } = this.state;
     const minLength = 1;
     const verifyNameAndEmail = name.length && email.length >= minLength;
@@ -31,14 +32,16 @@ class Login extends Component {
     history.push('/settings');
   };
 
-  //   handleBtn = (e) => {
-  //     e.preventDefault();
-  //     const { dispatch, history } = this.props;
-  //     const { email } = this.state;
-  //     dispatch(getEmail(email));
-  //     dispatch(fetchWithThunk());
-  //     history.push('/carteira');
-  //   };
+  handleBtn = async () => {
+    const { history, dispatch } = this.props;
+    await dispatch(fetchCurrency());
+    console.log(this.props);
+    const { tokenAPI } = this.props;
+    const { Playgame: { api: { token } } } = tokenAPI;
+    console.log(token);
+    localStorage.setItem('token', token);
+    history.push('/game');
+  };
 
   render() {
     const { email, name, isBtnDisabled } = this.state;
@@ -69,7 +72,7 @@ class Login extends Component {
           </label>
           <button
             data-testid="btn-play"
-            type="submit"
+            type="button"
             name="btn"
             disabled={ isBtnDisabled }
             onClick={ this.handleBtn }
@@ -89,9 +92,18 @@ class Login extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  tokenAPI: state,
+});
+
 Login.propTypes = {
-  dispatch: PropTypes.func,
-  history: PropTypes.func,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }),
+  tokenAPI: PropTypes.shape({
+    token: PropTypes.string,
+  }),
+  apiDispatch: PropTypes.func,
 }.isRequired;
 
-export default connect()(Login);
+export default connect(mapStateToProps)(Login);
