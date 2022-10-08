@@ -35,10 +35,8 @@ class Login extends Component {
   handleBtn = async () => {
     const { history, dispatch } = this.props;
     await dispatch(fetchCurrency());
-    console.log(this.props);
     const { tokenAPI } = this.props;
     const { Playgame: { api: { token } } } = tokenAPI;
-    console.log(token);
     localStorage.setItem('token', token);
     history.push('/game');
   };
