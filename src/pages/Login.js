@@ -33,10 +33,13 @@ class Login extends Component {
   };
 
   handleBtn = async () => {
-    const { apiDispatch, tokenAPI, history } = this.props;
-    await apiDispatch();
+    const { history, dispatch } = this.props;
+    await dispatch(fetchCurrency());
+    console.log(this.props);
+    const { tokenAPI } = this.props;
     const { Playgame: { api: { token } } } = tokenAPI;
-    localStorage.setItem('token', JSON.stringify(token));
+    console.log(token);
+    localStorage.setItem('token', token);
     history.push('/game');
   };
 
@@ -88,9 +91,7 @@ class Login extends Component {
     );
   }
 }
-const mapDispatchToProps = (dispatch) => ({
-  apiDispatch: (state) => dispatch(fetchCurrency(state)),
-});
+
 const mapStateToProps = (state) => ({
   tokenAPI: state,
 });
@@ -105,4 +106,4 @@ Login.propTypes = {
   apiDispatch: PropTypes.func,
 }.isRequired;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps)(Login);

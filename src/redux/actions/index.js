@@ -1,10 +1,8 @@
 const FETCH_API = 'FETCH_API';
-
 const fetchAPI = (payload) => ({
   type: FETCH_API,
   payload,
 });
-
 const fetchCurrency = () => async (dispatch) => {
   try {
     const response = await fetch(
