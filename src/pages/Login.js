@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { fetchCurrency } from '../redux/actions';
+import {
+  fetchCurrency,
+  getUser,
+} from '../redux/actions';
 
 class Login extends Component {
   state = {
@@ -34,6 +37,8 @@ class Login extends Component {
 
   handleBtn = async () => {
     const { history, dispatch } = this.props;
+    const { name, email } = this.state;
+    await dispatch(getUser({ name, email }));
     await dispatch(fetchCurrency());
     const { tokenAPI } = this.props;
     const { Playgame: { api: { token } } } = tokenAPI;
@@ -101,7 +106,6 @@ Login.propTypes = {
   tokenAPI: PropTypes.shape({
     token: PropTypes.string,
   }),
-  apiDispatch: PropTypes.func,
 }.isRequired;
 
 export default connect(mapStateToProps)(Login);
