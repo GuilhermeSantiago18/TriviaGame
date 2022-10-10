@@ -18,9 +18,6 @@ const fetchCurrency = () => async (dispatch) => {
     const result = await response.json();
     dispatch(fetchAPI(result));
   } catch (e) {
-    localStorage.clear();
-    const { history } = this.props;
-    history.push('/');
     throw new Error(e);
   }
 };
@@ -34,7 +31,12 @@ const getQuestions = async () => {
     const responseJson = await response.json();
     return response.ok ? (
       Promise.resolve(responseJson)) : (Promise.resolve(responseJson));
-  } catch (e) { throw new Error(e); }
+  } catch (e) {
+    localStorage.clear();
+    const { history } = this.props;
+    history.push('/');
+    throw new Error(e);
+  }
 };
 
 export {
