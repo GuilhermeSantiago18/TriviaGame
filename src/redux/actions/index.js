@@ -21,10 +21,22 @@ const fetchCurrency = () => async (dispatch) => {
     throw new Error(e);
   }
 };
+
+const getQuestions = async () => {
+  const token = localStorage.getItem('token');
+  const numberOfQuestions = 1;
+  const QUESTIONS_BASE_API = `https://opentdb.com/api.php?amount=${numberOfQuestions}&token=${token}`;
+  const response = await fetch(QUESTIONS_BASE_API);
+  const responseJson = await response.json();
+  return response.ok ? (
+    Promise.resolve(responseJson)) : (Promise.resolve(responseJson));
+};
+
 export {
   FETCH_API,
   fetchAPI,
   fetchCurrency,
   getUser,
   GET_USER,
+  getQuestions,
 };
