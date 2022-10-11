@@ -4,12 +4,14 @@ const INITIAL_STATE = {
   api: {},
   user: '',
   counter: 30,
+  countCorrect: 0,
 };
 
 function stateGlobal(state = INITIAL_STATE, action) {
   switch (action.type) {
   case GET_USER:
     return {
+      ...state,
       user: action.payload,
     };
   case FETCH_API:
@@ -17,11 +19,13 @@ function stateGlobal(state = INITIAL_STATE, action) {
       ...state,
       api: action.payload,
     };
-  case 'TIMER':
+  case 'CORRECT_ANSWER':
     return {
       ...state,
-      counter: action.payload,
+      countCorrect: action.payload,
+
     };
+
   default:
     return state;
   }

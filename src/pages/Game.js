@@ -1,17 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Timer from '../components/Timer';
 import Header from '../components/Header';
-import { getQuestions } from '../redux/actions';
+import { getQuestions, correctAnswerAct } from '../redux/actions';
 
 class Game extends React.Component {
   state = {
+    counter: 30,
+    timer2: null,
     questions: [],
     loading: true,
     btnActive: false,
     viewNextButton: false,
     numberOfQuestion: 0,
+    countCorrect: 0,
     asking: {
       answersArray: [],
       question: '',
@@ -30,7 +32,23 @@ class Game extends React.Component {
       questions,
       loading: false,
     }, () => this.createQuestions());
+    const num = 1000;
+    const timer2 = setInterval(this.downTimer, num);
+    this.setState({ timer2 });
   }
+
+  downTimer = () => {
+    const { counter } = this.state;
+    if (counter > 0) {
+      this.setState((prevState) => ({
+        counter: prevState.counter - 1,
+      }));
+    }
+    if (counter === 0) {
+      const { timer2 } = this.state;
+      clearInterval(timer2);
+    }
+  };
 
   createQuestions = () => {
     const { questions, numberOfQuestion } = this.state;
@@ -71,6 +89,21 @@ class Game extends React.Component {
     this.setState({ asking });
   };
 
+  answerEventCorrect = () => {
+    const { countCorrect } = this.state;
+    this.setState({
+      viewNextButton: true,
+      btnActive: true,
+      countCorrect: countCorrect + 1,
+    }, this.dispatchFunc);
+  };
+
+  dispatchFunc = () => {
+    const { countCorrect } = this.state;
+    const { dispatch } = this.props;
+    dispatch(correctAnswerAct(countCorrect));
+  };
+
   answerEvent = () => {
     this.setState({
       viewNextButton: true,
@@ -80,15 +113,21 @@ class Game extends React.Component {
 
   nextEvent = () => {
     const { numberOfQuestion } = this.state;
-    this.setState({
-      viewNextButton: false,
-      numberOfQuestion: (numberOfQuestion + 1),
-    }, () => this.createQuestions());
+    const { history } = this.props;
+    const numberOfQuestionMax = 4;
+    if (numberOfQuestion < numberOfQuestionMax) {
+      this.setState({
+        viewNextButton: false,
+        numberOfQuestion: (numberOfQuestion + 1),
+        counter: 30,
+      }, () => this.createQuestions());
+    } else {
+      history.push('/feedback');
+    }
   };
 
   render() {
-    const { loading, viewNextButton, btnActive, asking } = this.state;
-    const { contador } = this.props;
+    const { loading, viewNextButton, btnActive, asking, counter } = this.state;
     const { answersArray, question, category } = asking;
     if (loading) { return <h1>Loading...</h1>; }
     return (
@@ -105,8 +144,8 @@ class Game extends React.Component {
                   key={ answer.id }
                   type="button"
                   data-testid="correct-answer"
-                  onClick={ this.answerEvent }
-                  disabled={ contador === 0 }
+                  onClick={ this.answerEventCorrect }
+                  disabled={ counter === 0 }
                   style={ {
                     border: btnActive ? '3px solid rgb(6, 240, 15)' : '' } }
                 >
@@ -120,7 +159,7 @@ class Game extends React.Component {
                   type="button"
                   data-testid={ `wrong-answer-${answer.id}` }
                   onClick={ this.answerEvent }
-                  disabled={ contador === 0 }
+                  disabled={ counter === 0 }
                   style={ {
                     border: btnActive ? '3px solid red' : '' } }
                 >
@@ -141,7 +180,7 @@ class Game extends React.Component {
             )
           }
         </form>
-        <Timer />
+        {counter}
       </div>
     );
   }
