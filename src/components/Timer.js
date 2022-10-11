@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { timer } from '../redux/actions';
 
 class Timer extends Component {
   state = {
-    counter: 30,
+    counter: 5,
+    timer2: null,
   };
 
   componentDidMount() {
     const num = 1000;
-    setInterval(() => this.downTimer(), num);
+    const timer2 = setInterval(this.downTimer, num);
+    this.setState({ timer2 });
   }
 
   downTimer = () => {
@@ -16,6 +21,12 @@ class Timer extends Component {
       this.setState((prevState) => ({
         counter: prevState.counter - 1,
       }));
+    }
+    if (counter === 0) {
+      const { dispatch } = this.props;
+      dispatch(timer(counter));
+      const { timer2 } = this.state;
+      clearInterval(timer2);
     }
   };
 
@@ -30,4 +41,9 @@ class Timer extends Component {
     );
   }
 }
-export default Timer;
+
+Timer.propTypes = {
+  dispatch: PropTypes.func,
+}.isRequired;
+
+export default connect()(Timer);
