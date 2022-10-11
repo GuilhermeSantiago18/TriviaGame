@@ -12,6 +12,8 @@ const getUser = (payload) => ({
 
 const timer = (payload) => ({ type: 'TIMER', payload });
 
+const correctAnswerAct = (payload) => ({ type: 'CORRECT_ANSWER', payload });
+
 const fetchCurrency = () => async (dispatch) => {
   try {
     const response = await fetch(
@@ -49,4 +51,5 @@ export {
   GET_USER,
   getQuestions,
   timer,
+  correctAnswerAct,
 };

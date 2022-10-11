@@ -12,14 +12,15 @@ class Header extends Component {
   };
 
   render() {
-    const { usuario } = this.props;
+    const { usuario, correctCount } = this.props;
+    console.log(correctCount);
     return (
       <div>
         <img alt="img" src={ this.getGravatar() } data-testid="header-profile-picture" />
         <h3 data-testid="header-player-name">
           {usuario.name}
         </h3>
-        <p data-testid="header-score">0</p>
+        <p data-testid="header-score">{correctCount}</p>
       </div>
     );
   }
@@ -27,6 +28,7 @@ class Header extends Component {
 
 const mapStateToProps = (state) => ({
   usuario: state.Playgame.user,
+  correctCount: state.Playgame.countCorrect,
 });
 
 Header.propTypes = {
