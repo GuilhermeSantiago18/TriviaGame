@@ -10,6 +10,11 @@ class Game extends React.Component {
     loading: true,
     viewNextButton: false,
     numberOfQuestion: 0,
+    asking: {
+      answersArray: [],
+      question: '',
+      category: '',
+    },
   };
 
   async componentDidMount() {
@@ -19,7 +24,10 @@ class Game extends React.Component {
       history.push('/');
       localStorage.removeItem('token');
     }
-    this.setState({ questions, loading: false });
+    this.setState({
+      questions,
+      loading: false,
+    }, () => this.createQuestions());
   }
 
   createQuestions = () => {
@@ -53,39 +61,36 @@ class Game extends React.Component {
         index1 -= 1;
       }
     }
-    return {
+    const asking = {
       answersArray: answersArrayRdn,
       question,
       category,
     };
+    this.setState({ asking });
   };
 
-  Aaa = () => {
+  answerEvent = () => {
     this.setState({ viewNextButton: true });
   };
 
-  Bbb = () => {
+  nextEvent = () => {
     const { numberOfQuestion } = this.state;
     this.setState({
       viewNextButton: false,
       numberOfQuestion: (numberOfQuestion + 1),
-    });
+    }, () => this.createQuestions());
   };
 
   render() {
-    const { loading, viewNextButton } = this.state;
-    if (loading) {
-      return <h1>Loading...</h1>;
-    }
-    const asking = this.createQuestions();
+    const { loading, viewNextButton, asking } = this.state;
     const { answersArray, question, category } = asking;
+    if (loading) { return <h1>Loading...</h1>; }
     return (
       <div>
         <Timer />
         <Header />
         <h2 data-testid="question-category">{category}</h2>
         <p data-testid="question-text">{question}</p>
-
         <form data-testid="answer-options">
           {answersArray.map((answer) => {
             switch (answer.isCorrect) {
@@ -95,7 +100,7 @@ class Game extends React.Component {
                   key={ answer.id }
                   type="button"
                   data-testid="correct-answer"
-                  onClick={ this.Aaa }
+                  onClick={ this.answerEvent }
                 >
                   {answer.answer}
                 </button>
@@ -106,7 +111,7 @@ class Game extends React.Component {
                   key={ answer.id }
                   type="button"
                   data-testid={ `wrong-answer-${answer.id}` }
-                  onClick={ this.Aaa }
+                  onClick={ this.answerEvent }
                 >
                   {answer.answer}
                 </button>
@@ -118,7 +123,7 @@ class Game extends React.Component {
               <button
                 type="button"
                 data-testid="btn-next"
-                onClick={ this.Bbb }
+                onClick={ this.nextEvent }
               >
                 Próxima Pergunta
               </button>
