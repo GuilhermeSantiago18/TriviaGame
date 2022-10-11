@@ -17,6 +17,7 @@ class Ranking extends React.Component {
     const rankingFake = DATA_TEST;
     return (
       <main>
+        <h2 data-testid="ranking-title">Ranking</h2>
         <nav>
           <button
             type="button"

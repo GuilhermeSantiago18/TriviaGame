@@ -4,6 +4,16 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 
 class Feedback extends React.Component {
+  handleClick = () => {
+    const { history } = this.props;
+    history.push('/');
+  };
+
+  rankingClick = () => {
+    const { history } = this.props;
+    history.push('/ranking');
+  };
+
   render() {
     const { answers } = this.props;
     const maxAnswer = 3;
@@ -16,6 +26,20 @@ class Feedback extends React.Component {
         ) : (
           <p data-testid="feedback-text">Could be better...</p>
         )}
+        <button
+          type="button"
+          data-testid="btn-play-again"
+          onClick={ this.handleClick }
+        >
+          Play Again
+        </button>
+        <button
+          type="button"
+          data-testid="btn-ranking"
+          onClick={ this.rankingClick }
+        >
+          Ranking
+        </button>
       </main>
     );
   }
