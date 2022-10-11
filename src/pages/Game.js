@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import Timer from '../components/Timer';
 import { getQuestions } from '../redux/actions';
@@ -103,5 +104,9 @@ class Game extends React.Component {
     );
   }
 }
+
+Game.propTypes = {
+  history: PropTypes.string,
+}.isRequired;
 
 export default Game;
