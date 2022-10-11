@@ -8,6 +8,8 @@ class Game extends React.Component {
   state = {
     questions: [],
     loading: true,
+    viewNextButton: false,
+    numberOfQuestion: 0,
   };
 
   async componentDidMount() {
@@ -21,32 +23,32 @@ class Game extends React.Component {
   }
 
   createQuestions = () => {
-    const { questions } = this.state;
+    const { questions, numberOfQuestion } = this.state;
     const { results } = questions;
     const correctAnswer = {
-      answer: results[0].correct_answer,
+      answer: results[numberOfQuestion].correct_answer,
       isCorrect: true,
       id: null,
     };
-    const incorrectAnswers = results[0].incorrect_answers.map(
+    const incorrectAnswers = results[numberOfQuestion].incorrect_answers.map(
       (answer, index) => ({
         answer,
         isCorrect: false,
         id: index,
       }),
     );
-    const { question } = results[0];
-    const { category } = results[0];
+    const { question } = results[numberOfQuestion];
+    const { category } = results[numberOfQuestion];
     const answersArray = [correctAnswer, ...incorrectAnswers];
 
     const arrayRdn = [];
     const answersArrayRdn = [];
     for (let index1 = 0; index1 < answersArray.length; index1 += 1) {
-      const abc = Math.random() * answersArray.length;
-      const abcd = Math.floor(abc);
-      if (arrayRdn.every((item) => item !== abcd)) {
-        arrayRdn.push(abcd);
-        answersArrayRdn.push(answersArray[abcd]);
+      const aleatoryNumber = Math.random() * answersArray.length;
+      const aleatoryNumbInt = Math.floor(aleatoryNumber);
+      if (arrayRdn.every((item) => item !== aleatoryNumbInt)) {
+        arrayRdn.push(aleatoryNumbInt);
+        answersArrayRdn.push(answersArray[aleatoryNumbInt]);
       } else {
         index1 -= 1;
       }
@@ -58,15 +60,25 @@ class Game extends React.Component {
     };
   };
 
+  Aaa = () => {
+    this.setState({ viewNextButton: true });
+  };
+
+  Bbb = () => {
+    const { numberOfQuestion } = this.state;
+    this.setState({
+      viewNextButton: false,
+      numberOfQuestion: (numberOfQuestion + 1),
+    });
+  };
+
   render() {
-    const { loading } = this.state;
+    const { loading, viewNextButton } = this.state;
     if (loading) {
       return <h1>Loading...</h1>;
     }
     const asking = this.createQuestions();
     const { answersArray, question, category } = asking;
-    // Acessar o jogo com um token inválido leva a um logout
-    // excluindo o token do localStorage e redirecionando a página para a tela de login
     return (
       <div>
         <Timer />
@@ -83,6 +95,7 @@ class Game extends React.Component {
                   key={ answer.id }
                   type="button"
                   data-testid="correct-answer"
+                  onClick={ this.Aaa }
                 >
                   {answer.answer}
                 </button>
@@ -93,12 +106,24 @@ class Game extends React.Component {
                   key={ answer.id }
                   type="button"
                   data-testid={ `wrong-answer-${answer.id}` }
+                  onClick={ this.Aaa }
                 >
                   {answer.answer}
                 </button>
               );
             }
           })}
+          {
+            (viewNextButton) && (
+              <button
+                type="button"
+                data-testid="btn-next"
+                onClick={ this.Bbb }
+              >
+                Próxima Pergunta
+              </button>
+            )
+          }
         </form>
       </div>
     );
