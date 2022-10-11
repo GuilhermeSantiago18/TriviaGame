@@ -147,6 +147,10 @@ class Game extends React.Component {
   }
 }
 
+Game.propTypes = {
+  history: PropTypes.string,
+}.isRequired;
+
 const mapStateToProps = (state) => ({
   contador: state.Playgame.counter,
 });

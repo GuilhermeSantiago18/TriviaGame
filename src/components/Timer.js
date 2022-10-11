@@ -5,7 +5,7 @@ import { timer } from '../redux/actions';
 
 class Timer extends Component {
   state = {
-    counter: 5,
+    counter: 30,
     timer2: null,
   };
 
