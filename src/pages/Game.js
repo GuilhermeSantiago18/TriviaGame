@@ -84,7 +84,11 @@ class Game extends React.Component {
                   key={ answer.id }
                   type="button"
                   data-testid="correct-answer"
+<<<<<<< HEAD
                   disabled={ contador === 0 }
+=======
+                  border="3px solid rgb(6, 240, 15)"
+>>>>>>> 2ab757a (d)
                 >
                   {answer.answer}
                 </button>
@@ -95,7 +99,11 @@ class Game extends React.Component {
                   key={ answer.id }
                   type="button"
                   data-testid={ `wrong-answer-${answer.id}` }
+<<<<<<< HEAD
                   disabled={ contador === 0 }
+=======
+                  border="3px solid red"
+>>>>>>> 2ab757a (d)
                 >
                   {answer.answer}
                 </button>
