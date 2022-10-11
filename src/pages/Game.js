@@ -1,7 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Header from '../components/Header';
 import Timer from '../components/Timer';
+import Header from '../components/Header';
 import { getQuestions } from '../redux/actions';
 
 class Game extends React.Component {
@@ -60,6 +61,7 @@ class Game extends React.Component {
 
   render() {
     const { loading } = this.state;
+    const { contador } = this.props;
     if (loading) {
       return <h1>Loading...</h1>;
     }
@@ -69,7 +71,6 @@ class Game extends React.Component {
     // excluindo o token do localStorage e redirecionando a página para a tela de login
     return (
       <div>
-        <Timer />
         <Header />
         <h2 data-testid="question-category">{category}</h2>
         <p data-testid="question-text">{question}</p>
@@ -83,6 +84,7 @@ class Game extends React.Component {
                   key={ answer.id }
                   type="button"
                   data-testid="correct-answer"
+                  disabled={ contador === 0 }
                 >
                   {answer.answer}
                 </button>
@@ -93,6 +95,7 @@ class Game extends React.Component {
                   key={ answer.id }
                   type="button"
                   data-testid={ `wrong-answer-${answer.id}` }
+                  disabled={ contador === 0 }
                 >
                   {answer.answer}
                 </button>
@@ -100,13 +103,20 @@ class Game extends React.Component {
             }
           })}
         </form>
+        <Timer />
       </div>
     );
   }
 }
 
+const mapStateToProps = (state) => ({
+  contador: state.Playgame.counter,
+});
+
 Game.propTypes = {
-  history: PropTypes.string,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }),
 }.isRequired;
 
-export default Game;
+export default connect(mapStateToProps)(Game);
