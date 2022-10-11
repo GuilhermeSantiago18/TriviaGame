@@ -69,6 +69,7 @@ class Game extends React.Component {
       category,
     };
     this.setState({ asking });
+    // reiniciado o temporizador para 30 segundos
   };
 
   answerEvent = () => {
@@ -80,10 +81,16 @@ class Game extends React.Component {
 
   nextEvent = () => {
     const { numberOfQuestion } = this.state;
-    this.setState({
-      viewNextButton: false,
-      numberOfQuestion: (numberOfQuestion + 1),
-    }, () => this.createQuestions());
+    const { history } = this.props;
+    const numberOfQuestionMax = 4;
+    if (numberOfQuestion < numberOfQuestionMax) {
+      this.setState({
+        viewNextButton: false,
+        numberOfQuestion: (numberOfQuestion + 1),
+      }, () => this.createQuestions());
+    } else {
+      history.push('/feedback');
+    }
   };
 
   render() {
@@ -146,10 +153,6 @@ class Game extends React.Component {
     );
   }
 }
-
-Game.propTypes = {
-  history: PropTypes.string,
-}.isRequired;
 
 const mapStateToProps = (state) => ({
   contador: state.Playgame.counter,
