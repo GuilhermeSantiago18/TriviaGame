@@ -9,6 +9,7 @@ class Game extends React.Component {
   state = {
     questions: [],
     loading: true,
+    btnActive: false,
   };
 
   async componentDidMount() {
@@ -59,8 +60,12 @@ class Game extends React.Component {
     };
   };
 
+  onClickBtn = () => {
+    this.setState({ btnActive: true });
+  };
+
   render() {
-    const { loading } = this.state;
+    const { loading, btnActive } = this.state;
     const { contador } = this.props;
     if (loading) {
       return <h1>Loading...</h1>;
@@ -84,11 +89,10 @@ class Game extends React.Component {
                   key={ answer.id }
                   type="button"
                   data-testid="correct-answer"
-<<<<<<< HEAD
                   disabled={ contador === 0 }
-=======
-                  border="3px solid rgb(6, 240, 15)"
->>>>>>> 2ab757a (d)
+                  style={ {
+                    border: btnActive ? '3px solid rgb(6, 240, 15)' : '' } }
+                  onClick={ this.onClickBtn }
                 >
                   {answer.answer}
                 </button>
@@ -99,11 +103,10 @@ class Game extends React.Component {
                   key={ answer.id }
                   type="button"
                   data-testid={ `wrong-answer-${answer.id}` }
-<<<<<<< HEAD
                   disabled={ contador === 0 }
-=======
-                  border="3px solid red"
->>>>>>> 2ab757a (d)
+                  style={ {
+                    border: btnActive ? '3px solid red' : '' } }
+                  onClick={ this.onClickBtn }
                 >
                   {answer.answer}
                 </button>
