@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { timer } from '../redux/actions';
 
@@ -14,10 +15,6 @@ class Timer extends Component {
     this.setState({ timer2 });
   }
 
-  componentWillUnmount() {
-    clearInterval(this.state.timer2);
-  }
-
   downTimer = () => {
     const { counter } = this.state;
     if (counter > 0) {
@@ -28,6 +25,8 @@ class Timer extends Component {
     if (counter === 0) {
       const { dispatch } = this.props;
       dispatch(timer(counter));
+      const { timer2 } = this.state;
+      clearInterval(timer2);
     }
   };
 
@@ -42,4 +41,9 @@ class Timer extends Component {
     );
   }
 }
+
+Timer.propTypes = {
+  dispatch: PropTypes.func,
+}.isRequired;
+
 export default connect()(Timer);
