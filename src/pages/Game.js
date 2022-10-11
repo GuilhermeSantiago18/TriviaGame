@@ -9,6 +9,7 @@ class Game extends React.Component {
   state = {
     questions: [],
     loading: true,
+    btnActive: false,
     viewNextButton: false,
     numberOfQuestion: 0,
     asking: {
@@ -71,7 +72,10 @@ class Game extends React.Component {
   };
 
   answerEvent = () => {
-    this.setState({ viewNextButton: true });
+    this.setState({
+      viewNextButton: true,
+      btnActive: true,
+    });
   };
 
   nextEvent = () => {
@@ -83,7 +87,7 @@ class Game extends React.Component {
   };
 
   render() {
-    const { loading, viewNextButton, asking } = this.state;
+    const { loading, viewNextButton, btnActive, asking } = this.state;
     const { contador } = this.props;
     const { answersArray, question, category } = asking;
     if (loading) { return <h1>Loading...</h1>; }
@@ -103,6 +107,8 @@ class Game extends React.Component {
                   data-testid="correct-answer"
                   onClick={ this.answerEvent }
                   disabled={ contador === 0 }
+                  style={ {
+                    border: btnActive ? '3px solid rgb(6, 240, 15)' : '' } }
                 >
                   {answer.answer}
                 </button>
@@ -115,6 +121,8 @@ class Game extends React.Component {
                   data-testid={ `wrong-answer-${answer.id}` }
                   onClick={ this.answerEvent }
                   disabled={ contador === 0 }
+                  style={ {
+                    border: btnActive ? '3px solid red' : '' } }
                 >
                   {answer.answer}
                 </button>
