@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Header from '../components/Header';
 import Timer from '../components/Timer';
 import { getQuestions } from '../redux/actions';
@@ -8,6 +9,7 @@ class Game extends React.Component {
   state = {
     questions: [],
     loading: true,
+    disabled: false,
   };
 
   async componentDidMount() {
@@ -56,6 +58,16 @@ class Game extends React.Component {
       question,
       category,
     };
+  };
+
+  handleDisable = () => {
+    const { time } = this.props;
+    const { Playgame: { counter } } = time;
+    if (counter === 0) {
+      this.setState({
+        disabled: true,
+      });
+    }
   };
 
   render() {
@@ -109,4 +121,8 @@ Game.propTypes = {
   history: PropTypes.string,
 }.isRequired;
 
-export default Game;
+const mapStateToProps = (state) => ({
+  time: state,
+});
+
+export default connect(mapStateToProps)(Game);

@@ -10,6 +10,8 @@ const getUser = (payload) => ({
   payload,
 });
 
+const timer = (payload) => ({ type: 'TIMER', payload });
+
 const fetchCurrency = () => async (dispatch) => {
   try {
     const response = await fetch(
@@ -46,4 +48,5 @@ export {
   getUser,
   GET_USER,
   getQuestions,
+  timer,
 };
