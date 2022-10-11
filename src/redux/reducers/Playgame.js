@@ -19,11 +19,6 @@ function stateGlobal(state = INITIAL_STATE, action) {
       ...state,
       api: action.payload,
     };
-  case 'TIMER':
-    return {
-      ...state,
-      counter: action.payload,
-    };
   case 'CORRECT_ANSWER':
     return {
       ...state,
