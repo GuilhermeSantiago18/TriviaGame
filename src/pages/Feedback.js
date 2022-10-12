@@ -46,7 +46,7 @@ class Feedback extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  answers: state.Playgame.countCorrect,
+  answers: state.player.countCorrect,
 });
 
 Feedback.propTypes = {

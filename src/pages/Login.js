@@ -41,7 +41,7 @@ class Login extends Component {
     await dispatch(getUser({ name, email }));
     await dispatch(fetchCurrency());
     const { tokenAPI } = this.props;
-    const { Playgame: { api: { token } } } = tokenAPI;
+    const { player: { api: { token } } } = tokenAPI;
     localStorage.setItem('token', token);
     history.push('/game');
   };

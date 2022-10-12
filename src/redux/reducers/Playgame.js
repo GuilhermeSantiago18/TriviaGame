@@ -1,13 +1,14 @@
-import { FETCH_API, GET_USER } from '../actions';
+import { FETCH_API, GET_USER, GET_POINTS } from '../actions';
 
 const INITIAL_STATE = {
   api: {},
   user: '',
   counter: 30,
   countCorrect: 0,
+  score: 0,
 };
 
-function stateGlobal(state = INITIAL_STATE, action) {
+function player(state = INITIAL_STATE, action) {
   switch (action.type) {
   case GET_USER:
     return {
@@ -25,9 +26,13 @@ function stateGlobal(state = INITIAL_STATE, action) {
       countCorrect: action.payload,
 
     };
-
+  case GET_POINTS:
+    return {
+      ...state,
+      score: action.payload,
+    };
   default:
     return state;
   }
 }
-export default stateGlobal;
+export default player;
