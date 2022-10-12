@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import { getQuestions, correctAnswerAct, getPoints } from '../redux/actions';
+import { getQuestions, correctAnswerAct, getPoints, getClear } from '../redux/actions';
 import Question from '../components/Question';
 
 class Game extends React.Component {
@@ -26,7 +26,8 @@ class Game extends React.Component {
   };
 
   async componentDidMount() {
-    const { history } = this.props;
+    const { history, dispatch } = this.props;
+    dispatch(getClear());
     const questions = await getQuestions();
     if (questions.response_code !== 0) {
       history.push('/');
@@ -171,7 +172,7 @@ class Game extends React.Component {
       const localRanking = JSON.parse(localStorage.getItem('ranking'));
       const rankingData = (localRanking !== null) ? localRanking : [];
       rankingData.push(newData);
-      rankingData.sort((a, b) => (a.name - b.name));
+      // rankingData.sort((a, b) => (a.name - b.name));
       rankingData.sort((a, b) => (Number(b.score) - Number(a.score)));
       localStorage.setItem('ranking', JSON.stringify(rankingData));
       history.push('/feedback');

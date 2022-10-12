@@ -1,6 +1,7 @@
 const FETCH_API = 'FETCH_API';
 const GET_USER = 'GET_USER';
 const GET_POINTS = 'GET_POINTS';
+const GET_CLEAR = 'GET_CLEAR';
 
 const fetchAPI = (payload) => ({
   type: FETCH_API,
@@ -13,6 +14,11 @@ const getUser = (payload) => ({
 
 const getPoints = (payload) => ({
   type: GET_POINTS,
+  payload,
+});
+
+const getClear = (payload) => ({
+  type: GET_CLEAR,
   payload,
 });
 
@@ -60,4 +66,6 @@ export {
   correctAnswerAct,
   getPoints,
   GET_POINTS,
+  getClear,
+  GET_CLEAR,
 };
