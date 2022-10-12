@@ -12,7 +12,7 @@ class Header extends Component {
   };
 
   render() {
-    const { usuario, correctCount } = this.props;
+    const { usuario, points } = this.props;
     return (
       <div>
         <img
@@ -21,7 +21,7 @@ class Header extends Component {
           data-testid="header-profile-picture"
         />
         <h3 data-testid="header-player-name">{usuario.name}</h3>
-        <p data-testid="header-score">{correctCount}</p>
+        <p data-testid="header-score">{points}</p>
         <button
           data-testid="btn-go-home"
           type="button"
@@ -37,6 +37,7 @@ class Header extends Component {
 const mapStateToProps = (state) => ({
   usuario: state.player.user,
   correctCount: state.player.countCorrect,
+  points: state.player.score,
 });
 
 Header.propTypes = {

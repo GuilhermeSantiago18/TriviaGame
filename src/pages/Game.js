@@ -169,7 +169,7 @@ class Game extends React.Component {
 
   render() {
     const { loading, viewNextButton, btnActive, asking,
-      counter, totalPoints } = this.state;
+      counter } = this.state;
     const { answersArray, question, category } = asking;
     if (loading) {
       return <h1>Loading...</h1>;
@@ -226,7 +226,6 @@ class Game extends React.Component {
           )}
         </form>
         {counter}
-        <p>{totalPoints}</p>
       </div>
     );
   }

@@ -4,7 +4,7 @@ const INITIAL_STATE = {
   api: {},
   user: '',
   counter: 30,
-  countCorrect: 0,
+  assertions: 0,
   score: 0,
 };
 
@@ -23,7 +23,7 @@ function player(state = INITIAL_STATE, action) {
   case 'CORRECT_ANSWER':
     return {
       ...state,
-      countCorrect: action.payload,
+      assertions: action.payload,
 
     };
   case GET_POINTS:
