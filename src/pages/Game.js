@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import { getQuestions, correctAnswerAct, getPoints } from '../redux/actions';
+import Question from '../components/Question';
 
 class Game extends React.Component {
   state = {
@@ -149,7 +150,7 @@ class Game extends React.Component {
 
   nextEvent = () => {
     const { numberOfQuestion } = this.state;
-    const { history } = this.props;
+    const { history, usuario, points } = this.props;
     const numberOfQuestionMax = 4;
     if (numberOfQuestion < numberOfQuestionMax) {
       this.setState(
@@ -163,6 +164,16 @@ class Game extends React.Component {
       );
       this.downTimer();
     } else {
+      const newData = {
+        name: usuario.name,
+        score: points,
+      };
+      const localRanking = JSON.parse(localStorage.getItem('ranking'));
+      const rankingData = (localRanking !== null) ? localRanking : [];
+      rankingData.push(newData);
+      rankingData.sort((a, b) => (a.name - b.name));
+      rankingData.sort((a, b) => (Number(b.score) - Number(a.score)));
+      localStorage.setItem('ranking', JSON.stringify(rankingData));
       history.push('/feedback');
     }
   };
@@ -177,68 +188,31 @@ class Game extends React.Component {
     return (
       <div>
         <Header />
-        <h2 data-testid="question-category">{category}</h2>
-        <p data-testid="question-text">{question}</p>
-        <form data-testid="answer-options">
-          {answersArray.map((answer) => {
-            switch (answer.isCorrect) {
-            case true:
-              return (
-                <button
-                  key={ answer.id }
-                  type="button"
-                  name="correct"
-                  data-testid="correct-answer"
-                  onClick={ this.answerEventCorrect }
-                  disabled={ counter === 0 }
-                  style={ {
-                    border: btnActive ? '3px solid rgb(6, 240, 15)' : '',
-                  } }
-                >
-                  {answer.answer}
-                </button>
-              );
-            default:
-              return (
-                <button
-                  key={ answer.id }
-                  type="button"
-                  data-testid={ `wrong-answer-${answer.id}` }
-                  onClick={ this.answerEvent }
-                  disabled={ counter === 0 }
-                  style={ {
-                    border: btnActive ? '3px solid red' : '',
-                  } }
-                >
-                  {answer.answer}
-                </button>
-              );
-            }
-          })}
-          {viewNextButton && (
-            <button
-              type="button"
-              data-testid="btn-next"
-              onClick={ this.nextEvent }
-            >
-              Próxima Pergunta
-            </button>
-          )}
-        </form>
+        <Question
+          category={ category }
+          question={ question }
+          answersArray={ answersArray }
+          viewNextButton={ viewNextButton }
+          btnActive={ btnActive }
+          answerEventCorrect={ this.answerEventCorrect }
+          answerEvent={ this.answerEvent }
+          nextEvent={ this.nextEvent }
+          counter={ counter }
+        />
         {counter}
       </div>
     );
   }
 }
 
-Game.propTypes = { history: PropTypes.string }.isRequired;
-
-const mapStateToProps = (state) => ({ contador: state.player.counter });
+const mapStateToProps = (state) => ({
+  contador: state.player.counter,
+  usuario: state.player.user,
+  points: state.player.score,
+});
 
 Game.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func,
-  }),
+  history: PropTypes.string,
 }.isRequired;
 
 export default connect(mapStateToProps)(Game);

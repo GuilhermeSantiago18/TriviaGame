@@ -17,7 +17,6 @@ class Feedback extends React.Component {
   render() {
     const { answers, points } = this.props;
     const maxAnswer = 3;
-    console.log(answers);
     return (
       <main>
         <Header />
