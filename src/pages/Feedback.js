@@ -15,7 +15,7 @@ class Feedback extends React.Component {
   };
 
   render() {
-    const { answers } = this.props;
+    const { answers, points } = this.props;
     const maxAnswer = 3;
     console.log(answers);
     return (
@@ -40,13 +40,16 @@ class Feedback extends React.Component {
         >
           Ranking
         </button>
+        <p data-testid="feedback-total-question">{answers}</p>
+        <p data-testid="feedback-total-score">{points}</p>
       </main>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  answers: state.Playgame.countCorrect,
+  answers: state.player.assertions,
+  points: state.player.score,
 });
 
 Feedback.propTypes = {

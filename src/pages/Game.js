@@ -2,13 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import { getQuestions, correctAnswerAct } from '../redux/actions';
+import { getQuestions, correctAnswerAct, getPoints } from '../redux/actions';
 
 class Game extends React.Component {
   state = {
     counter: 30,
-    timer2: null,
+    stopTimer: false,
+    totalPoints: 0,
     questions: [],
+    id: 0,
     loading: true,
     btnActive: false,
     viewNextButton: false,
@@ -18,6 +20,7 @@ class Game extends React.Component {
       answersArray: [],
       question: '',
       category: '',
+      difficulty: '',
     },
   };
 
@@ -28,26 +31,31 @@ class Game extends React.Component {
       history.push('/');
       localStorage.removeItem('token');
     }
-    this.setState({
-      questions,
-      loading: false,
-    }, () => this.createQuestions());
-    const num = 1000;
-    const timer2 = setInterval(this.downTimer, num);
-    this.setState({ timer2 });
+    this.setState(
+      {
+        questions,
+        loading: false,
+      },
+      () => this.downTimer(),
+    );
   }
 
   downTimer = () => {
-    const { counter } = this.state;
-    if (counter > 0) {
-      this.setState((prevState) => ({
-        counter: prevState.counter - 1,
-      }));
-    }
-    if (counter === 0) {
-      const { timer2 } = this.state;
-      clearInterval(timer2);
-    }
+    this.createQuestions();
+    const num = 1000;
+    const interval = setInterval(() => {
+      this.setState(
+        (prevState) => ({
+          counter: prevState.counter - 1,
+        }),
+        () => {
+          const { counter, stopTimer } = this.state;
+          if (counter === 0 || stopTimer) {
+            clearInterval(interval);
+          }
+        },
+      );
+    }, num);
   };
 
   createQuestions = () => {
@@ -89,13 +97,40 @@ class Game extends React.Component {
     this.setState({ asking });
   };
 
-  answerEventCorrect = () => {
-    const { countCorrect } = this.state;
-    this.setState({
-      viewNextButton: true,
-      btnActive: true,
-      countCorrect: countCorrect + 1,
-    }, this.dispatchFunc);
+  answerEventCorrect = ({ target }) => {
+    const { name } = target;
+    const { dispatch } = this.props;
+    const { countCorrect, id } = this.state;
+    const ten = 10;
+    const three = 3;
+    let pontos = 0;
+    this.setState(
+      {
+        viewNextButton: true,
+        btnActive: true,
+        countCorrect: countCorrect + 1,
+        id: id + 1,
+        stopTimer: true,
+      },
+      this.dispatchFunc,
+    );
+    if (name === 'correct') {
+      const { questions, counter } = this.state;
+      if (questions.results[id].difficulty === 'easy') pontos += ten + counter * 1;
+      if (questions.results[id].difficulty === 'medium') pontos += ten + counter * 2;
+      if (questions.results[id].difficulty === 'hard') pontos += ten + counter * three;
+    } else {
+      pontos += 0;
+    }
+    this.setState(
+      (prevState) => ({
+        totalPoints: prevState.totalPoints + pontos,
+      }),
+      () => {
+        const { totalPoints } = this.state;
+        dispatch(getPoints(totalPoints));
+      },
+    );
   };
 
   dispatchFunc = () => {
@@ -108,6 +143,7 @@ class Game extends React.Component {
     this.setState({
       viewNextButton: true,
       btnActive: true,
+      stopTimer: true,
     });
   };
 
@@ -116,20 +152,28 @@ class Game extends React.Component {
     const { history } = this.props;
     const numberOfQuestionMax = 4;
     if (numberOfQuestion < numberOfQuestionMax) {
-      this.setState({
-        viewNextButton: false,
-        numberOfQuestion: (numberOfQuestion + 1),
-        counter: 30,
-      }, () => this.createQuestions());
+      this.setState(
+        {
+          viewNextButton: false,
+          numberOfQuestion: numberOfQuestion + 1,
+          counter: 30,
+          stopTimer: false,
+        },
+        () => this.createQuestions(),
+      );
+      this.downTimer();
     } else {
       history.push('/feedback');
     }
   };
 
   render() {
-    const { loading, viewNextButton, btnActive, asking, counter } = this.state;
+    const { loading, viewNextButton, btnActive, asking,
+      counter } = this.state;
     const { answersArray, question, category } = asking;
-    if (loading) { return <h1>Loading...</h1>; }
+    if (loading) {
+      return <h1>Loading...</h1>;
+    }
     return (
       <div>
         <Header />
@@ -143,11 +187,13 @@ class Game extends React.Component {
                 <button
                   key={ answer.id }
                   type="button"
+                  name="correct"
                   data-testid="correct-answer"
                   onClick={ this.answerEventCorrect }
                   disabled={ counter === 0 }
                   style={ {
-                    border: btnActive ? '3px solid rgb(6, 240, 15)' : '' } }
+                    border: btnActive ? '3px solid rgb(6, 240, 15)' : '',
+                  } }
                 >
                   {answer.answer}
                 </button>
@@ -161,24 +207,23 @@ class Game extends React.Component {
                   onClick={ this.answerEvent }
                   disabled={ counter === 0 }
                   style={ {
-                    border: btnActive ? '3px solid red' : '' } }
+                    border: btnActive ? '3px solid red' : '',
+                  } }
                 >
                   {answer.answer}
                 </button>
               );
             }
           })}
-          {
-            (viewNextButton) && (
-              <button
-                type="button"
-                data-testid="btn-next"
-                onClick={ this.nextEvent }
-              >
-                Próxima Pergunta
-              </button>
-            )
-          }
+          {viewNextButton && (
+            <button
+              type="button"
+              data-testid="btn-next"
+              onClick={ this.nextEvent }
+            >
+              Próxima Pergunta
+            </button>
+          )}
         </form>
         {counter}
       </div>
@@ -186,13 +231,9 @@ class Game extends React.Component {
   }
 }
 
-Game.propTypes = {
-  history: PropTypes.string,
-}.isRequired;
+Game.propTypes = { history: PropTypes.string }.isRequired;
 
-const mapStateToProps = (state) => ({
-  contador: state.Playgame.counter,
-});
+const mapStateToProps = (state) => ({ contador: state.player.counter });
 
 Game.propTypes = {
   history: PropTypes.shape({

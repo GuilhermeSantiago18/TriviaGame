@@ -1,5 +1,6 @@
 const FETCH_API = 'FETCH_API';
 const GET_USER = 'GET_USER';
+const GET_POINTS = 'GET_POINTS';
 
 const fetchAPI = (payload) => ({
   type: FETCH_API,
@@ -7,6 +8,11 @@ const fetchAPI = (payload) => ({
 });
 const getUser = (payload) => ({
   type: GET_USER,
+  payload,
+});
+
+const getPoints = (payload) => ({
+  type: GET_POINTS,
   payload,
 });
 
@@ -52,4 +58,6 @@ export {
   getQuestions,
   timer,
   correctAnswerAct,
+  getPoints,
+  GET_POINTS,
 };

@@ -12,23 +12,32 @@ class Header extends Component {
   };
 
   render() {
-    const { usuario, correctCount } = this.props;
-    console.log(correctCount);
+    const { usuario, points } = this.props;
     return (
       <div>
-        <img alt="img" src={ this.getGravatar() } data-testid="header-profile-picture" />
-        <h3 data-testid="header-player-name">
-          {usuario.name}
-        </h3>
-        <p data-testid="header-score">{correctCount}</p>
+        <img
+          alt="img"
+          src={ this.getGravatar() }
+          data-testid="header-profile-picture"
+        />
+        <h3 data-testid="header-player-name">{usuario.name}</h3>
+        <p data-testid="header-score">{points}</p>
+        <button
+          data-testid="btn-go-home"
+          type="button"
+          onClick={ this.handleClick }
+        >
+          Go home
+        </button>
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  usuario: state.Playgame.user,
-  correctCount: state.Playgame.countCorrect,
+  usuario: state.player.user,
+  correctCount: state.player.countCorrect,
+  points: state.player.score,
 });
 
 Header.propTypes = {
