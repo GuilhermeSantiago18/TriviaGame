@@ -1,0 +1,18 @@
+.questions {
+display:flex;
+margin-top: -30px;
+width: 100%;
+padding: 80px;
+flex-direction: column;
+}
+.answers{
+    display:flex;
+    justify-content: space-between;
+    padding:50px;
+justify-content: center;
+    
+}
+.buttons{
+    border: 10px solid purple;
+    margin-right: 1000px;
+}

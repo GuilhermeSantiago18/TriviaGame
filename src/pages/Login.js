@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/Login.css';
 import {
   fetchCurrency,
   getUser,
@@ -50,46 +54,57 @@ class Login extends Component {
     const { email, name, isBtnDisabled } = this.state;
     return (
       <div>
-        <form>
-          <label htmlFor="email">
-            Email:
-            <input
-              data-testid="input-gravatar-email"
-              id="email"
-              type="email"
-              name="email"
-              value={ email }
-              onChange={ this.handleChange }
-            />
-          </label>
-          <label htmlFor="name">
-            Name:
-            <input
-              data-testid="input-player-name"
-              id="name"
-              type="text"
-              name="name"
-              value={ name }
-              onChange={ this.handleChange }
-            />
-          </label>
-          <button
-            data-testid="btn-play"
-            type="button"
-            name="btn"
-            disabled={ isBtnDisabled }
-            onClick={ this.handleBtn }
-          >
-            Play
-          </button>
-          <button
-            type="button"
-            data-testid="btn-settings"
-            onClick={ this.handleBtnConfig }
-          >
-            Configurações
-          </button>
-        </form>
+        <h1 className="title">{'LET\'S PLAY!'}</h1>
+        <Form className="form">
+          <Form.Group className="mb-3 forminput">
+            <Form.Label htmlFor="email">
+              Email:
+              <Form.Control
+                className="form-control"
+                placeholder="e-mail"
+                data-testid="input-gravatar-email"
+                id="email"
+                type="email"
+                name="email"
+                value={ email }
+                onChange={ this.handleChange }
+              />
+            </Form.Label>
+            <Form.Label htmlFor="name">
+              Name:
+              <Form.Control
+                data-testid="input-player-name"
+                placeholder="name"
+                id="name"
+                type="text"
+                name="name"
+                value={ name }
+                onChange={ this.handleChange }
+              />
+            </Form.Label>
+          </Form.Group>
+          <Form.Group className="buttonsform">
+            <Button
+              data-testid="btn-play"
+              variant="success"
+              type="button"
+              name="btn"
+              disabled={ isBtnDisabled }
+              onClick={ this.handleBtn }
+            >
+              Play
+            </Button>
+            <Button
+              variant="info"
+              syze=""
+              type="button"
+              data-testid="btn-settings"
+              onClick={ this.handleBtnConfig }
+            >
+              Configurações
+            </Button>
+          </Form.Group>
+        </Form>
       </div>
     );
   }

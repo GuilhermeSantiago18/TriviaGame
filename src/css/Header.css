@@ -1,0 +1,15 @@
+.score{
+    padding-top: 20px;
+    font-size: 25px;
+}
+.header{
+    margin-top: 10px;
+    display: flex;
+    align-content: space-between;
+    justify-content: space-between;
+    align-items: center;
+}
+.user{
+    display: flex;
+    align-items: center;
+}

@@ -1,0 +1,17 @@
+.tabela{
+    margin-top: 100px;
+    margin-left: 350px;
+    width: 700px;
+}
+
+.titulo{
+font-size: 60px;
+margin-top: 70px;
+margin-left: 570px;
+}
+
+.inicial{
+display: flex;
+justify-content: end;
+margin-top: 20px;
+}

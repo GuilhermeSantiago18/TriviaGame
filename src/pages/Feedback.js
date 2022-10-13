@@ -1,7 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
 import Header from '../components/Header';
+import '../css/Feedback.css';
 
 class Feedback extends React.Component {
   handleClick = () => {
@@ -20,28 +23,36 @@ class Feedback extends React.Component {
     return (
       <main>
         <Header />
-        {answers >= maxAnswer ? (
-          <p data-testid="feedback-text">Well Done!</p>
-        ) : (
-          <p data-testid="feedback-text">Could be better...</p>
-        )}
-        <button
-          type="button"
-          data-testid="btn-play-again"
-          onClick={ this.handleClick }
-        >
-          Play Again
-        </button>
-        <button
-          type="button"
-          data-testid="btn-ranking"
-          onClick={ this.rankingClick }
-        >
-          Ranking
-        </button>
-        <p data-testid="feedback-total-question">{answers}</p>
-        <p data-testid="feedback-total-score">{points}</p>
+        <Container className="retorno">
+          {answers >= maxAnswer ? (
+            <p data-testid="feedback-text" className="mensagem">Well Done!</p>
+          ) : (
+            <p data-testid="feedback-text" className="mensagem">Could be better...</p>
+          )}
+          <Button
+            className="me-2"
+            variant="dark"
+            type="button"
+            data-testid="btn-play-again"
+            onClick={ this.handleClick }
+          >
+            Play Again
+          </Button>
+          <Button
+            variant="dark"
+            type="button"
+            data-testid="btn-ranking"
+            onClick={ this.rankingClick }
+          >
+            Ranking
+          </Button>
+          <Container className="resultado">
+            <p data-testid="feedback-total-question">{`Correct Answers: ${answers}`}</p>
+            <p data-testid="feedback-total-score">{`Total Score: ${points}`}</p>
+          </Container>
+        </Container>
       </main>
+
     );
   }
 }

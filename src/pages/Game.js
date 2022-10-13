@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Container } from 'react-bootstrap';
 import Header from '../components/Header';
 import { getQuestions, correctAnswerAct, getPoints, getClear } from '../redux/actions';
 import Question from '../components/Question';
+import '../css/Game.css';
 
 class Game extends React.Component {
   state = {
@@ -161,6 +163,7 @@ class Game extends React.Component {
           numberOfQuestion: numberOfQuestion + 1,
           counter: 30,
           stopTimer: false,
+          btnActive: false,
         },
         () => this.createQuestions(),
       );
@@ -190,6 +193,8 @@ class Game extends React.Component {
     return (
       <div>
         <Header />
+        <Container className="tempo">{`TIMER: ${counter}`}</Container>
+
         <Question
           category={ category }
           question={ question }
@@ -201,7 +206,7 @@ class Game extends React.Component {
           nextEvent={ this.nextEvent }
           counter={ counter }
         />
-        {counter}
+
       </div>
     );
   }
