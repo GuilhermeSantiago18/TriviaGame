@@ -24,7 +24,7 @@ class Game extends React.Component {
       difficulty: '',
     },
   };
-
+// limpa score no estado global
   async componentDidMount() {
     const { history, dispatch } = this.props;
     dispatch(getClear());
