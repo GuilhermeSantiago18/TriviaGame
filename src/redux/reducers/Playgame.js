@@ -1,4 +1,4 @@
-import { FETCH_API, GET_USER, GET_POINTS } from '../actions';
+import { FETCH_API, GET_USER, GET_POINTS, GET_CLEAR } from '../actions';
 
 const INITIAL_STATE = {
   api: {},
@@ -24,12 +24,17 @@ function player(state = INITIAL_STATE, action) {
     return {
       ...state,
       assertions: action.payload,
-
     };
   case GET_POINTS:
     return {
       ...state,
       score: action.payload,
+    };
+  case GET_CLEAR:
+    return {
+      ...state,
+      score: 0,
+      assertions: 0,
     };
   default:
     return state;
