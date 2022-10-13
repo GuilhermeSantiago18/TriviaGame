@@ -101,7 +101,7 @@ class Login extends Component {
               data-testid="btn-settings"
               onClick={ this.handleBtnConfig }
             >
-              Configurações
+              Settings
             </Button>
           </Form.Group>
         </Form>
